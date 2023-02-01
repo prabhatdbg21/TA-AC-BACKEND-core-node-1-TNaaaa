@@ -1,34 +1,18 @@
-//1
-var fs = require('fs')
+var {readFile, readFileSync} = require('fs')
 
-fs.readFile('./content.md', (err, file) => {
-  console.log(err, file.toString())
+// async code
+readFile('./content.md', 'utf8', (err, file) => {
+  console.log(err, file)
 })
 
-//2
-console.log('first')
+// sync code
+let result = readFileSync('./content.md', 'utf8');
+console.log(result)
 
-console.time('task1')
-for (let i = 0; i < 100000; i++) {
-    // work to do 
-}
-console.timeEnd('task1')
 
-console.log('last')
-
-//3
-console.log('first')
-
-setTimeout( () => {
-    console.log('second');
-}, 1000)
-
-console.log('last')
-
-//4
 var buff1 = Buffer.alloc(10)
 console.log(buff1)
 
-//5
+
 buff1.write('Welcome to Buffer')
 console.log(buff1)
