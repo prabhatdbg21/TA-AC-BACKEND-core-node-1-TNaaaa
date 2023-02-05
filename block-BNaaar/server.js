@@ -12,10 +12,10 @@ function handleRequest(req, res) {
         res.end()
     } else if(req.method === 'GET' && pathname === '/about') {
         res.setHeader('Content-Type' , 'text/html'); 
-        res.end('<h2> this is all about NodeJS </h2>')
+        res.end('<h2> this is all about NodeJS </h2>');
     } else if(req.method === 'POST' && pathname === '/about') {
-        // JSON.res ('{message: this is a post request}')
-        res.end('{message: this is a post request}')
+        res.setHeader('Content-type', 'application/json');
+        res.end('{message: this is a post request}');
     } else {
         res.writeHead(404, {'Content-Type': "text/html"});    // page not found
         res.end('<h2>Page not Found</h2>');
