@@ -18,9 +18,9 @@ function handleRequest(req, res) {
         })
     } else if(req.method === 'GET' && pathname === '/stream') {
         res.setHeader('Content-Type' , 'text/html'); 
-        fs.createReadStream('./node.html').pipe(res) //  
+        fs.createReadStream('./node.html').pipe(res); 
     } else {
-        res.writeHead(404, {'Content-Type': "text/html"});    // page not found
+        res.writeHead(404, {'Content-Type': "text/html"}); 
         res.end('<h2>Page not Found</h2>');
     }
 }
