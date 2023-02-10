@@ -9,7 +9,6 @@ var http = require ('http');
 
 http.createServer((request, response) => {
     console.log(request, response);
-    response.end()
 }).listen(5000, 'localhost');   
 
 
@@ -35,7 +34,7 @@ var http = require ('http');
 
 http.createServer((request, response) => {
     console.log(request.headers);
-    response.end()
+    response.end(request.headers['user-agent'])
 }).listen(5555, 'localhost');
 
 /*
@@ -48,7 +47,7 @@ var http = require ('http');
 
 http.createServer((request, response) => {
     console.log(request.url, request.method);
-    response.end()
+    response.end(request.method + request.url);
 }).listen(5566, 'localhost');
 
 /*
@@ -60,8 +59,7 @@ Q5. write code to create a node server
 var http = require ('http');
 
 http.createServer((request, response) => {
-    console.log(request.headers);
-    response.end()
+    response.end(JSON.stringify(request.headers));
 }).listen(7001, () => {
     console.log('server listening on port 7000')
 })
@@ -115,7 +113,10 @@ var http = require ('http');
 
 http.createServer((req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.end(`{success: true, message: 'Welcome to Nodejs'}`);
+    res.end(JSON.stringify({
+        success: true, 
+        message: 'Welcome to Nodejs'
+    }));
 }).listen(8888, 'localhost');
 
 /*
@@ -154,8 +155,8 @@ function handleRequest(req, res) {
     var pathname = parsedUrl.pathname;
 
     if(req.method === 'GET' && pathname === '/') {
-        res.write('Prabhat')
-        res.end()
+        res.setHeader('Content-Type' , 'text/plain'); 
+        res.end('Prabhat');
     } else if(req.method === 'GET' && pathname === '/about') {
         res.setHeader('Content-Type' , 'text/html'); 
         res.end('<h2>Prabhat</h2>');
@@ -184,7 +185,7 @@ function handleRequest(req, res) {
 
     if(req.method === 'GET' && pathname === '/users') {
         res.setHeader('Content-Type' , 'text/html'); 
-        res.end('<h2>Prabhat</h2> <p>prabhatdbg21@gmail.com</p>');
+        fs.createReadStream('./form.html').pipe(res);
     } else if(req.method === 'POST' && pathname === '/users') {
         res.write('Posted for the second time')
         res.end()
@@ -198,7 +199,7 @@ server.listen(4100);
 
 
 /*
-Q. create a server and handle query params from the request on following url i.e. `/users?email=nodeserver@gmail.com` from browser
+Q12. create a server and handle query params from the request on following url i.e. `/users?email=nodeserver@gmail.com` from browser
 
   - parse the  request url using parse method from url module
   - console pathname from parsed url in above step
@@ -207,6 +208,8 @@ Q. create a server and handle query params from the request on following url i.e
   - grab the email from query params
   - return json response with email from query params
 */
+
+
 var http = require ('http');
 var url = require('url');
 var fs = require('fs');
@@ -214,20 +217,14 @@ var fs = require('fs');
 var server = http.createServer(handleRequest);
 
 function handleRequest(req, res) {
-    var parsedUrl = url.parse(req.url);
-    var pathname = parsedUrl.pathname;
-
-    if(req.method === 'GET' && pathname === '/users') {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(parsedUrl.query);
-    } else {
-        res.writeHead(404, {'Content-Type': "text/html"}); 
-        res.end('<h2>Page not Found</h2>');
-    }
+    var parsedUrl = url.parse(req.url, true);
+    console.log(parsedUrl.pathname, req.url);
+    console.log(parsedUrl);
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(parsedUrl.query));
 }
 
 server.listen(6100);
-
 
 
 
